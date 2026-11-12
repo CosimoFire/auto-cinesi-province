@@ -121,7 +121,7 @@ def main(csv_path, geo_path, out_path):
     lon0, lon1, lat0, lat1 = 6.55, 18.6, 36.55, 47.15
     kx = math.cos(math.radians(41.5))
     sc = (W - 2 * MX) / ((lon1 - lon0) * kx)
-    TOP = 20
+    TOP = 195  # spazio in alto per titolo, sottotitolo e legenda
     MAPH = (lat1 - lat0) * sc
 
     def P(x, y):
@@ -176,8 +176,8 @@ def main(csv_path, geo_path, out_path):
             f'<line x1="{x:.1f}" y1="{y:.1f}" x2="{tx - verso * 3:.1f}" y2="{ty - 4:.1f}" stroke="#000" stroke-width="0.7"/>'
             f'<text x="{tx:.1f}" y="{ty:.1f}" text-anchor="{anc}" class="lab"><tspan font-weight="600">{o["nome"]}</tspan> {it(o["q"])}%</text>')
 
-    # testi in basso: titolo, sottotitolo, legenda, fonte
-    y = TOP + MAPH + 40
+    # in alto: titolo, sottotitolo, legenda; in basso: fonte
+    y = 44
     testi = [f'<text x="{MX}" y="{y:.0f}" font-size="24" font-weight="700">{html.escape(TITOLO)}</text>']
     y += 28
     for riga in SOTTOTITOLO:
@@ -197,7 +197,7 @@ def main(csv_path, geo_path, out_path):
     xa = MX + LW * MEDIA_ITALIA / DMAX
     testi.append(f'<line x1="{xa:.1f}" y1="{y - 3:.0f}" x2="{xa:.1f}" y2="{y + LH + 3:.0f}" stroke="#000" stroke-width="1.5"/>'
                  f'<text x="{xa + 5:.1f}" y="{y - 2:.0f}" class="small" font-size="12">Media Italia {it(MEDIA_ITALIA)}%</text>')
-    y += LH + 48
+    y = TOP + MAPH + 30
     for riga in FONTE:
         testi.append(f'<text x="{MX}" y="{y:.0f}" class="foot">{html.escape(riga)}</text>')
         y += 16
