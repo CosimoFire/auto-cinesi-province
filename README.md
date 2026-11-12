@@ -1,4 +1,4 @@
-# Auto di marchi cinesi per provincia (gennaio-ottobre 2026)
+﻿# Auto di marchi cinesi per provincia (gennaio-ottobre 2026)
 
 Quota di auto nuove di marchi cinesi sul totale delle immatricolazioni, per provincia di residenza del proprietario.
 
@@ -44,7 +44,7 @@ Testi, classi, colori e richiami sono costanti in cima a `src/mappa.py` (`TITOLO
 ```html
 <object data="https://cosimofire.github.io/auto-cinesi-province/output/mappa_auto_cinesi_province_gen-ott2026.svg"
   type="image/svg+xml" aria-label="Immatricolazioni di auto cinesi per provincia, gennaio-ottobre 2026"
-  style="width:100%;max-width:800px;aspect-ratio:800/854;display:block;margin:0 auto;border:0"></object>
+  style="width:100%;max-width:800px;aspect-ratio:800/974;display:block;margin:0 auto;border:0"></object>
 ```
 
 Il tooltip funziona con `<object>` o `<iframe>`, non con `<img>`.
