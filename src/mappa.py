@@ -34,8 +34,13 @@ ETICHETTE = {  # provincia: (lato, spostamento verticale)
     "NAPOLI": (-1, 0), "CATANIA": (1, 0), "ISERNIA": (1, -0.3), "TRIESTE": (1, 0),
 }
 
-# --- scala di colore continua (OKLab) tra i toni della redazione, 0-25% -----
-STOPS = ["#f3f3f1", "#dfe3e0", "#8FACB0", "#527f86", "#202F3D"]
+# --- scala di colore continua (OKLab), 0-25% -------------------------------
+# Ogni palette = 5 toni dal più chiaro (0%) al più scuro (25% e oltre).
+PALETTE = {
+    "redazione": ["#f3f3f1", "#dfe3e0", "#8FACB0", "#527f86", "#202F3D"],
+    "blu": ["#f2f6fb", "#c9dcf0", "#7eaedb", "#2f6fb3", "#0b2f5e"],
+}
+STOPS = PALETTE["redazione"]
 DMAX = 25.0
 
 
@@ -70,6 +75,12 @@ def _to_hex(L, a, b):
 
 
 LABS = [_to_lab(h) for h in STOPS]
+
+
+def usa_palette(nome):
+    """Sceglie la palette (chiave di PALETTE) per tutta la mappa."""
+    global LABS
+    LABS = [_to_lab(h) for h in PALETTE[nome]]
 
 
 def colore(v):
@@ -208,4 +219,6 @@ text{{fill:#000;font-family:'Source Serif 4',Georgia,serif}} .small{{font-size:1
 
 
 if __name__ == "__main__":
+    # quarto argomento facoltativo: nome della palette (redazione | blu)
+    usa_palette(sys.argv[4] if len(sys.argv) > 4 else "redazione")
     main(*sys.argv[1:4])

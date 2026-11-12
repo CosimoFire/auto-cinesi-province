@@ -37,6 +37,12 @@ pip install -r requirements.txt
 python src/mappa.py dati/quota_auto_cinesi_province_gen-ott2026.csv dati/province_2023.geojson output/mappa_auto_cinesi_province_gen-ott2026.svg
 ```
 
+Versione in toni del blu (quarto argomento = nome della palette, vedi `PALETTE` in `src/mappa.py`):
+
+```
+python src/mappa.py dati/quota_auto_cinesi_province_gen-ott2026.csv dati/province_2023.geojson output/mappa_auto_cinesi_province_gen-ott2026_blu.svg blu
+```
+
 Per rifare l'estrazione dai PDF, scaricare i file mensili in una cartella (es. `pdf/`) e lanciare:
 
 ```
