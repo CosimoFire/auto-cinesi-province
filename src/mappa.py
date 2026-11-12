@@ -203,7 +203,7 @@ def main(csv_path, geo_path, out_path):
         y += 16
     H = int(y + 6)
 
-    svg = f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" width="{W}" height="{H}" font-family="'Source Serif 4', Georgia, serif">
+    svg = f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" width="100%" style="max-width:{W}px;height:auto;display:block;margin:0 auto" font-family="'Source Serif 4', Georgia, serif">
 <style>@import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&amp;display=swap');
 text{{fill:#000;font-family:'Source Serif 4',Georgia,serif}} .small{{font-size:13px}} .foot{{font-size:11.5px}}
 .lab{{font-size:13px;paint-order:stroke;stroke:#fff;stroke-width:3px;stroke-linejoin:round}}
