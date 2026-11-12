@@ -37,11 +37,17 @@ pip install -r requirements.txt
 python src/mappa.py dati/quota_auto_cinesi_province_gen-ott2026.csv dati/province_2023.geojson output/mappa_auto_cinesi_province_gen-ott2026.svg
 ```
 
-Versione in toni del blu (quarto argomento = nome della palette, vedi `PALETTE` in `src/mappa.py`):
+Testi, classi, colori e richiami sono costanti in cima a `src/mappa.py` (`TITOLO`, `SOGLIE`, `COLORI`, `RICHIAMI`...).
 
+## Embed
+
+```html
+<object data="https://cosimofire.github.io/auto-cinesi-province/output/mappa_auto_cinesi_province_gen-ott2026.svg"
+  type="image/svg+xml" aria-label="Immatricolazioni di auto cinesi per provincia, gennaio-ottobre 2026"
+  style="width:100%;max-width:800px;aspect-ratio:800/854;display:block;margin:0 auto;border:0"></object>
 ```
-python src/mappa.py dati/quota_auto_cinesi_province_gen-ott2026.csv dati/province_2023.geojson output/mappa_auto_cinesi_province_gen-ott2026_blu.svg blu
-```
+
+Il tooltip funziona con `<object>` o `<iframe>`, non con `<img>`.
 
 Per rifare l'estrazione dai PDF, scaricare i file mensili in una cartella (es. `pdf/`) e lanciare:
 
