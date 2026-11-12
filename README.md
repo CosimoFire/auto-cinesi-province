@@ -37,7 +37,7 @@ pip install -r requirements.txt
 python src/mappa.py dati/quota_auto_cinesi_province_gen-ott2026.csv dati/province_2023.geojson output/mappa_auto_cinesi_province_gen-ott2026.svg
 ```
 
-Testi, classi, colori e richiami sono costanti in cima a `src/mappa.py` (`TITOLO`, `SOGLIE`, `COLORI`, `RICHIAMI`...).
+Testi, classi, colori e richiami sono costanti in cima a `src/mappa.py` (`TITOLO`, `STOPS`, `RICHIAMI`...).
 
 ## Embed
 
