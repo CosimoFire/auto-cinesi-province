@@ -91,6 +91,54 @@ def colore(v):
     return _to_hex(*[a[k] + (b[k] - a[k]) * f for k in range(3)])
 
 
+# --- tooltip -------------------------------------------------------------------
+# Riquadro disegnato nell'SVG: compare al passaggio del mouse e al tocco.
+# Funziona aprendo l'SVG direttamente o incorporandolo con <object> / <iframe>,
+# non con <img> (che disattiva gli script).
+TOOLTIP = """<g id="tip" visibility="hidden" pointer-events="none">
+<rect id="tip-bg" rx="4" fill="#fff" stroke="#a0acad" stroke-width="1"/>
+<text id="tip-nome" font-size="14" font-weight="700"></text>
+<text id="tip-auto" font-size="13"></text>
+<text id="tip-quota" font-size="13"></text>
+</g>
+<script><![CDATA[
+(function () {
+  var svg = document.documentElement, tip = document.getElementById('tip');
+  var bg = document.getElementById('tip-bg');
+  var tN = document.getElementById('tip-nome'), tA = document.getElementById('tip-auto'), tQ = document.getElementById('tip-quota');
+  var vb = svg.viewBox.baseVal, PAD = 10;
+  function punto(e) {
+    var p = svg.createSVGPoint(), t = e.touches ? e.touches[0] : e;
+    p.x = t.clientX; p.y = t.clientY;
+    return p.matrixTransform(svg.getScreenCTM().inverse());
+  }
+  function mostra(e) {
+    var el = e.target;
+    if (!el.getAttribute || !el.getAttribute('data-nome')) return;
+    tN.textContent = el.getAttribute('data-nome');
+    tA.textContent = 'Auto cinesi immatricolate: ' + el.getAttribute('data-auto');
+    tQ.textContent = 'In % sulle nuove immatricolazioni: ' + el.getAttribute('data-quota');
+    var w = Math.max(tN.getComputedTextLength(), tA.getComputedTextLength(), tQ.getComputedTextLength()) + 2 * PAD, h = 66;
+    var p = punto(e), x = p.x + 14, y = p.y + 14;
+    if (x + w > vb.width - 4) x = p.x - w - 14;
+    if (y + h > vb.height - 4) y = p.y - h - 14;
+    bg.setAttribute('x', x); bg.setAttribute('y', y); bg.setAttribute('width', w); bg.setAttribute('height', h);
+    tN.setAttribute('x', x + PAD); tN.setAttribute('y', y + 21);
+    tA.setAttribute('x', x + PAD); tA.setAttribute('y', y + 40);
+    tQ.setAttribute('x', x + PAD); tQ.setAttribute('y', y + 57);
+    tip.setAttribute('visibility', 'visible');
+  }
+  function nascondi() { tip.setAttribute('visibility', 'hidden'); }
+  var aree = document.querySelectorAll('.prov path');
+  for (var i = 0; i < aree.length; i++) {
+    aree[i].addEventListener('mousemove', mostra);
+    aree[i].addEventListener('mouseleave', nascondi);
+    aree[i].addEventListener('touchstart', mostra, { passive: true });
+  }
+  svg.addEventListener('touchstart', function (e) { if (!e.target.getAttribute('data-nome')) nascondi(); }, { passive: true });
+})();
+]]></script>"""
+
 # --- utilità -----------------------------------------------------------------
 def chiave(nome):
     s = unicodedata.normalize("NFKD", nome).encode("ascii", "ignore").decode().upper()
@@ -157,9 +205,10 @@ def main(csv_path, geo_path, out_path):
 
     regioni = []
     for o in sorted(province, key=lambda o: o["q"]):
-        tip = f"{o['nome']}: {it(o['cn'], 0)} auto di marchi cinesi su {it(o['tot'], 0)} immatricolazioni ({it(o['q'])}%)"
+        # i dati del tooltip viaggiano come attributi, letti dallo script in fondo all'SVG
         regioni.append(f'<path d="{path(o["g"].simplify(0.004, preserve_topology=True))}" '
-                       f'fill="{colore(round(o["q"], 1))}"><title>{html.escape(tip)}</title></path>')
+                       f'fill="{colore(round(o["q"], 1))}" data-nome="{html.escape(o["nome"])}" '
+                       f'data-auto="{it(o["cn"], 0)}" data-quota="{it(o["q"])}%"/>')
     contorno = path(unary_union(geoms).simplify(0.004))
 
     etichette = []
@@ -213,6 +262,7 @@ text{{fill:#000;font-family:'Source Serif 4',Georgia,serif}} .small{{font-size:1
 <path d="{contorno}" fill="none" stroke="#a0acad" stroke-width="0.6"/>
 {"".join(etichette)}
 {"".join(testi)}
+{TOOLTIP}
 </svg>'''
     open(out_path, "w", encoding="utf-8").write(svg)
     print(f"{out_path}: {len(svg) // 1024} KB, {W}x{H}")
